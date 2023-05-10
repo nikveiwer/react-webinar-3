@@ -5,7 +5,9 @@ class Store {
   constructor(initState = {}) {
     this.state = initState;
     this.listeners = []; // Слушатели изменений состояния
+    this.unicNumber = this.state.list.length;//Начальное значение генератора не должно быть меньше изначальной длины массива
   }
+
 
   /**
    * Подписка слушателя на изменения состояния
@@ -42,9 +44,10 @@ class Store {
    * Добавление новой записи
    */
   addItem() {
+    this.unicNumber++
     this.setState({
       ...this.state,
-      list: [...this.state.list, {code: this.state.list.length + 1, title: 'Новая запись'}]
+      list: [...this.state.list, {code: this.unicNumber, title: 'Новая запись', selectedCount: 0}]
     })
   };
 
@@ -67,7 +70,12 @@ class Store {
     this.setState({
       ...this.state,
       list: this.state.list.map(item => {
+        //Сбрасываем выделение у всех остальных
+        item.selected = false;
         if (item.code === code) {
+          //Увеличиваем счетчик выделений, если на элемент кликают, когда он не выделен
+          !item.selected && item.selectedCount++
+
           item.selected = !item.selected;
         }
         return item;
