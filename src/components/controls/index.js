@@ -2,20 +2,26 @@ import React from "react";
 import PropTypes from 'prop-types';
 import './style.css';
 
-function Controls({onAdd}){
+import { plural } from "../../utils";
+
+function Controls({toggleModal}){
   return (
     <div className='Controls'>
-      <button onClick={() => onAdd()}>Добавить</button>
+      <p className="Controls-text">В корзине:</p>
+      <div className="Controls-data">
+        {"2"} {plural(2, {one: 'товар', few: 'товара', many: 'товаров'})} / {(223).toLocaleString("ru-RU")} ₽
+      </div>
+      <button onClick={toggleModal}>Перейти</button>
     </div>
   )
 }
 
 Controls.propTypes = {
-  onAdd: PropTypes.func
+  toggleModal: PropTypes.func
 };
 
 Controls.defaultProps = {
-  onAdd: () => {}
+  toggleModal: () => {}
 }
 
 export default React.memo(Controls);
