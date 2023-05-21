@@ -21,11 +21,21 @@
 .Item-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 24px;
   padding: 20px 20px 20px 10px;
 }
 
 .Item-price {
+  margin-right: 24px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  white-space: nowrap;
+  color: #404040;
+}
+
+
+.Item-count {
+  margin: 0 24px 0 38px;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;

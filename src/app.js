@@ -4,6 +4,7 @@ import Controls from "./components/controls";
 import Head from "./components/head";
 import PageLayout from "./components/page-layout";
 import Modal from './components/modal';
+import Total from './components/total';
 
 /**
  * Приложение
@@ -13,20 +14,33 @@ import Modal from './components/modal';
 function App({store}) {
 
   const list = store.getState().list;
+  const basketList = store.getState().basket
 
-  const [isModal, setIsModal] = useState(true)
+  const [isModal, setIsModal] = useState(false)
 
   const callbacks = {
-    onDeleteItem: useCallback((code) => {
-      store.deleteItem(code);
+    onDeleteFromBasket: useCallback((code) => {
+      store.deleteFromBasket(code);
     }, [store]),
 
     onSelectItem: useCallback((code) => {
       store.selectItem(code);
     }, [store]),
 
-    onAddItem: useCallback(() => {
-      store.addItem();
+    onAddToBasket: useCallback((listItem) => {
+      store.addToBasket(listItem);
+    }, [store]),
+
+    onDeleteFromBasket: useCallback((code) => {
+      store.deleteFromBasket(code);
+    }, [store]),
+
+    getFullCount: useCallback(() => {
+      return store.getFullCount()
+    }, [store]),
+
+    getFullPrice: useCallback(() => {
+      return store.getFullPrice()
     }, [store]),
 
     toggleModal: () => {
@@ -37,11 +51,18 @@ function App({store}) {
   return (
     <PageLayout>
       <Head title='Магазин'/>
-      <Controls toggleModal={callbacks.toggleModal}/>
+      <Controls toggleModal={callbacks.toggleModal} 
+                getFullCount={callbacks.getFullCount} 
+                getFullPrice={callbacks.getFullPrice}/>
       <List list={list}
-            onDeleteItem={callbacks.onDeleteItem}
-            onSelectItem={callbacks.onSelectItem}/>
-      {isModal && <Modal text="Корзина" toggleModal={callbacks.toggleModal}></Modal>}
+            onAddToBasket={callbacks.onAddToBasket}/>
+      {isModal &&
+        <Modal text="Корзина" toggleModal={callbacks.toggleModal}>
+          <List list={basketList}
+                onDeleteFromBasket={callbacks.onDeleteFromBasket}
+                basket/>
+          <Total getFullPrice={callbacks.getFullPrice}/>
+        </Modal>}
     </PageLayout>
   );
 }

@@ -43,46 +43,74 @@ class Store {
   /**
    * Добавление новой записи
    */
-  addItem() {
+  addToBasket(listItem) {
+
+    const isAlreadyExist = this.state.basket.find(item => item.code === listItem.code)
+    let newBasket;
+
+    if (!isAlreadyExist) {
+      newBasket = [...this.state.basket, { ...listItem, count: 1 }]
+    } else {
+
+      isAlreadyExist.count++
+
+      newBasket = this.state.basket.map(item => {
+        if (item.code === listItem.code) {
+          return isAlreadyExist
+        }
+
+        return item
+      })
+    }
+
     this.setState({
       ...this.state,
-      list: [...this.state.list, {code: generateCode(), title: 'Новая запись'}]
+      basket: newBasket
     })
   };
 
+  
+
   /**
-   * Удаление записи по коду
+   * Удаление из корзины
    * @param code
    */
-  deleteItem(code) {
+  deleteFromBasket(code) {
     this.setState({
       ...this.state,
-      // Новый список, в котором не будет удаляемой записи
-      list: this.state.list.filter(item => item.code !== code)
+      basket: this.state.basket.filter(item => item.code !== code)
     })
   };
+
+  getFullCount() {
+    return this.state.basket.length
+  }
+
+  getFullPrice() {
+    return this.state.basket.reduce((acc, curr) => acc+ curr.price*curr.count, 0)
+  }
 
   /**
    * Выделение записи по коду
    * @param code
    */
-  // selectItem(code) {
-  //   this.setState({
-  //     ...this.state,
-  //     list: this.state.list.map(item => {
-  //       if (item.code === code) {
-  //         // Смена выделения и подсчёт
-  //         return {
-  //           ...item,
-  //           selected: !item.selected,
-  //           count: item.selected ? item.count : item.count + 1 || 1,
-  //         };
-  //       }
-  //       // Сброс выделения если выделена
-  //       return item.selected ? {...item, selected: false} : item;
-  //     })
-  //   })
-  // }
+  selectItem(code) {
+    this.setState({
+      ...this.state,
+      list: this.state.list.map(item => {
+        if (item.code === code) {
+          // Смена выделения и подсчёт
+          return {
+            ...item,
+            selected: !item.selected,
+            count: item.selected ? item.count : item.count + 1 || 1,
+          };
+        }
+        // Сброс выделения если выделена
+        return item.selected ? {...item, selected: false} : item;
+      })
+    })
+  }
 }
 
 export default Store;
