@@ -1,28 +1,20 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 import './style.css';
 
-import { plural } from "../../utils";
+import { plural } from '../../utils';
 
-function Total(props){
-
-  const fullPrice = props.getFullPrice().toLocaleString("ru-RU")
-
-  return (
-    <div className='Total'>
-        <div>Итого</div>
-        <div>{fullPrice} ₽</div>
-    </div>
-  )
+function Total(props) {
+    return (
+        <div className="Total">
+            <div>Итого</div>
+            <div>{props.fullPrice.toLocaleString('ru-RU')} ₽</div>
+        </div>
+    );
 }
 
 Total.propTypes = {
-  getFullPrice: PropTypes.func
- 
+    fullPrice: PropTypes.number,
 };
-
-Total.defaultProps = {
-  getFullPrice: () => {}
-}
 
 export default Total;
