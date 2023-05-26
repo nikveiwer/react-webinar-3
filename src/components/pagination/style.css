@@ -1,0 +1,38 @@
+.Pagination {
+    margin-top: 23px;
+    padding: 0 22px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Pagination-page {
+    background: none;
+    border: none;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 16px;
+    color: #000000;
+}
+
+.Pagination-page:hover {
+    width: 20px;
+    height: 20px;
+    background-color: #E1E1E1;
+
+}
+
+.active {
+    width: 20px;
+    height: 20px;
+    color: white;
+    background-color: #0087E9;
+    ;
+}
