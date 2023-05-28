@@ -11,7 +11,8 @@ class Catalog extends StoreModule {
         return {
             list: [],
             totalPages: 1,
-            currentPage: 100
+            currentPage: 1,
+            currentProduct: {}
         };
     }
 
@@ -21,9 +22,9 @@ class Catalog extends StoreModule {
 
         const response = await fetch(
             `/api/v1/articles?limit=${limit}&skip=${(currentPage - 1)*limit}&fields=items(_id, title, price),count`,
-        ); //'/api/v1/articles'
+        );
         const json = await response.json();
-        console.log(json)
+        
         this.setState(
             {
                 ...this.getState(),
@@ -31,6 +32,29 @@ class Catalog extends StoreModule {
                 totalPages: Math.ceil(json.result.count / limit),
             },
             'Загружены товары из АПИ',
+        );
+    }
+
+    async loadProduct(productId) {
+
+        const response = await fetch(
+            `/api/v1/articles/${productId}?fields=*,madeIn(title,code),category(title)`,
+        ); 
+        const json = await response.json();
+        console.log(json)
+        this.setState(
+            {
+                ...this.getState(),
+                currentProduct: {
+                    title: json.result.title,
+                    descr: json.result.description,
+                    country: `${json.result.madeIn.title} (${json.result.madeIn.code})`,
+                    category: json.result.category.title,
+                    year: (new Date(json.result.dateCreate)).getFullYear(),
+                    price: json.result.price
+                }
+            },
+            'Загружен текущий товар',
         );
     }
 

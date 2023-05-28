@@ -17,7 +17,8 @@ function Main() {
     list: state.catalog.list,
     amount: state.basket.amount,
     sum: state.basket.sum,
-    currentPage: state.catalog.currentPage
+    currentPage: state.catalog.currentPage,
+    totalPages: state.catalog.totalPages
   }));
 
   useEffect(() => {
@@ -30,7 +31,7 @@ function Main() {
     // Открытие модалки корзины
     openModalBasket: useCallback(() => store.actions.modals.open('basket'), [store]),
     //Изменена текущая страница
-    openModalBasket: useCallback((page) => store.actions.catalog.setCurrentPage(page), [store]),
+    setCurrentPage: useCallback((page) => store.actions.catalog.setCurrentPage(page), [store]),
   }
 
   const renders = {
@@ -45,7 +46,7 @@ function Main() {
       <BasketTool onOpen={callbacks.openModalBasket} amount={select.amount}
                   sum={select.sum}/>
       <List list={select.list} renderItem={renders.item}/>
-      <Pagination></Pagination>
+      <Pagination currentPage={select.currentPage} totalPages={select.totalPages} setCurrentPage={callbacks.setCurrentPage}></Pagination>
     </PageLayout>
 
   );
