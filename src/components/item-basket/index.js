@@ -18,7 +18,7 @@ function ItemBasket(props) {
     <div className={cn()}>
       {/*<div className={cn('code')}>{props.item._id}</div>*/}
       <div className={cn('title')}>
-        <Link to={`/${props.item._id}`} className={cn("link")}>
+        <Link onClick={props.onClose} to={`/products/${props.item._id}`} className={cn("link")}>
           {props.item.title}
         </Link >
       </div>
@@ -39,10 +39,12 @@ ItemBasket.propTypes = {
     amount: PropTypes.number
   }).isRequired,
   onRemove: propTypes.func,
+  onClose: propTypes.func,
 }
 
 ItemBasket.defaultProps = {
   onRemove: () => {},
+  onClose: () => {}
 }
 
 export default memo(ItemBasket);

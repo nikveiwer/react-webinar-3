@@ -10,9 +10,9 @@ function BasketTool({sum, amount, onOpen}) {
   return (
     <div className={cn()}>
 
-      <div>
+      {/* <div>
         <Link className={cn("main")} to={"/"}>Главная</Link>
-      </div>
+      </div> */}
 
       <div className={cn("info")}>
         <span className={cn('label')}>В корзине:</span>

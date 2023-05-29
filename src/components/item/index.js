@@ -10,14 +10,14 @@ function Item(props){
   const cn = bem('Item');
 
   const callbacks = {
-    onAdd: (e) => props.onAdd(props.item._id)
+    onAdd: (e) => props.onAdd(props.item)
   }
 
   return (
     <div className={cn()}>
       {/*<div className={cn('code')}>{props.item._id}</div>*/}
       <div className={cn('title')}>
-        <Link to={`/${props.item._id}`} className={cn("link")}>
+        <Link to={`/products/${props.item._id}`} className={cn("link")}>
           {props.item.title}
         </Link >
       </div>

@@ -4,9 +4,10 @@ import {cn as bem} from '@bem-react/classname';
 import {numberFormat} from "../../utils";
 import './style.css';
 
-function ProductInfo({descr, country, category, year, price, productId, addToBasket}) {
+function ProductInfo({descr, country, category, year, price, productId, title, addToBasket}) {
 
   const cn = bem('ProductInfo');
+  console.log(productId)
 
   return (
     <div className={cn()}>
@@ -30,7 +31,7 @@ function ProductInfo({descr, country, category, year, price, productId, addToBas
             Цена: {numberFormat(price)} ₽
         </div>
 
-        <button onClick={() => addToBasket(productId)}>Добавить</button>
+        <button onClick={() => addToBasket({_id: productId, title, price })}>Добавить</button>
     </div>
   );
 }
