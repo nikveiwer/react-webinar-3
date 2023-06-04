@@ -25,7 +25,7 @@ function CatalogFilter() {
     // Сброс
     onReset: useCallback(() => store.actions.catalog.resetParams(), [store]),
     //Выбор определенной категории
-    onCategory: useCallback(category => store.actions.catalog.setParams({category}), [store]),
+    onCategory: useCallback(category => store.actions.catalog.setParams({category, page: 1}), [store]),
   };
 
   const options = {
@@ -43,8 +43,11 @@ function CatalogFilter() {
     <SideLayout padding='medium'>
       <Select options={select.categories} value={select.category} onChange={callbacks.onCategory}/>
       <Select options={options.sort} value={select.sort} onChange={callbacks.onSort}/>
-      <Input value={select.query} onChange={callbacks.onSearch} placeholder={'Поиск'}
-             delay={1000}/>
+      <Input value={select.query}
+             onChange={callbacks.onSearch} 
+             placeholder={'Поиск'}
+             delay={1000}
+             theme={"big"}/>
       <button onClick={callbacks.onReset}>{t('filter.reset')}</button>
     </SideLayout>
   )

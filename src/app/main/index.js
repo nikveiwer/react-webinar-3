@@ -8,12 +8,14 @@ import Head from "../../components/head";
 import CatalogFilter from "../../containers/catalog-filter";
 import CatalogList from "../../containers/catalog-list";
 import LocaleSelect from "../../containers/locale-select";
+import AuthPanel from '../../containers/auth-panel';
 
 function Main() {
 
   const store = useStore();
 
   useInit(() => {
+    store.actions.auth.authChecking()
     store.actions.catalog.initParams();
   }, [], true);
 
@@ -21,6 +23,7 @@ function Main() {
 
   return (
     <PageLayout>
+      <AuthPanel/>
       <Head title={t('title')}>
         <LocaleSelect/>
       </Head>

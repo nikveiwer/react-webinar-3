@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import {cn as bem} from '@bem-react/classname';
 import './style.css';
 
-function SideLayout({children, side, padding}) {
+function SideLayout({children, side, gap, padding}) {
   const cn = bem('SideLayout');
   return (
-    <div className={cn({side, padding})}>
+    <div className={cn({side, padding, gap})}>
       {React.Children.map(children, (child) => (
         <div key={child.key} className={cn('item')}>{child}</div>
       ))}
@@ -16,8 +16,9 @@ function SideLayout({children, side, padding}) {
 
 SideLayout.propTypes = {
   children: PropTypes.node,
+  gap: PropTypes.oneOf(["medium"]),
   side: PropTypes.oneOf(['start', 'end', 'between']),
-  padding: PropTypes.oneOf(['small', 'medium']),
+  padding: PropTypes.oneOf(['small', 'medium', "small-medium"]),
 }
 
 SideLayout.defaultProps = {};
