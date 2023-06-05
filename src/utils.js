@@ -42,17 +42,19 @@ export function categoriesFormat(items, initCategories = []) {
 
   items.forEach(item => {
       level[item._id] = item.parent ? level[item.parent._id] + 1 : 0;
-      let prefix = '-'.repeat(level[item._id]);
+      let prefix = '- '.repeat(level[item._id]);
 
       let obj = {
           value: item._id,
-          title: prefix + item.title
+          title: prefix + item.title,
+          childCount: 0
       };
 
       //Вставляем после непосредственного предка
       map[item._id] = obj;
       if (item.parent) {
-          let index = result.indexOf(map[item.parent._id]);
+          let index = result.indexOf(map[item.parent._id]) + map[item.parent._id].childCount;
+          map[item.parent._id].childCount++
           result.splice(index + 1, 0, obj);
       } else {
           result.push(obj);

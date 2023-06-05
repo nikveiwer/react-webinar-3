@@ -36,6 +36,14 @@
   gap: 10px;
 }
 
+.SideLayout_border_bottom {
+  border-bottom: 1px solid #DCDCDC;
+}
+
+.SideLayout_margin_no {
+  margin: 0
+}
+
 .SideLayout-item {
   margin: 0 5px;
 }

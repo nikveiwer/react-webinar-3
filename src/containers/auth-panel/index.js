@@ -15,7 +15,7 @@ function AuthPanel() {
 
   const select = useSelector(state => ({
     isLoggedIn: state.auth.isLoggedIn,
-    name: state.auth.profileInfo.name,
+    name: state.profile.profileInfo.name,
   }));
 
   const callbacks = {
@@ -33,7 +33,7 @@ function AuthPanel() {
   const {t} = useTranslate();
 
   return (
-    <SideLayout side={"end"} gap={"medium"} padding='small-medium'>
+    <SideLayout side={"end"} gap={"medium"} padding='small-medium' border={"bottom"} margin={"no"}>
     
       {select.isLoggedIn ? (
         <div>

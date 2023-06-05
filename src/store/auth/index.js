@@ -7,11 +7,6 @@ class AuthState extends StoreModule {
       loginValue: "",
       passwordValue: "",
       isLoggedIn: false,
-      profileInfo: {
-        name: "",
-        phone: "",
-        email: ""
-      },
       serverError: "",
       waiting: false 
     }
@@ -31,6 +26,13 @@ class AuthState extends StoreModule {
     });
   }
 
+  setLoggedIn(boolValue) {
+    this.setState({
+        ...this.getState(),
+        isLoggedIn: boolValue
+    });
+  }
+
   authChecking() {
     const isInStorage = Boolean(localStorage.getItem("token"))
 
@@ -44,54 +46,6 @@ class AuthState extends StoreModule {
     });
 
     return isInStorage
-
-  }
-
-
-  async getProfileInfo() {
-
-    this.setState({
-      ...this.getState(),
-      waiting: true
-    });
-
-    const token = localStorage.getItem("token");
-
-    try {
-      const response = await fetch(`/api/v1/users/self`, {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          "X-Token": token
-        },
-      });
-      const json = await response.json();
-
-      console.log(json)
-
-      if (json.error) {
-        throw new Error(json.error.message)
-      }
-
-      this.setState({
-        ...this.getState(),
-        profileInfo: {
-          name: json.result.profile.name,
-          phone: json.result.profile.phone,
-          email: json.result.email
-        },
-        waiting: false
-      });
-
-    } catch (e) {
-
-      console.log(e.message)
-      this.setState({
-        ...this.getState(),
-        waiting: false
-      });
-
-    }
 
   }
 
@@ -115,7 +69,8 @@ class AuthState extends StoreModule {
       const json = await response.json();
 
       if (json.error) {
-        throw new Error(json.error.message)
+        console.log(json)
+        throw new Error(json.error.data.issues[0].message)
       } else {
         localStorage.setItem("token", json.result.token)
         localStorage.setItem("name", json.result.user.profile.name)
@@ -182,6 +137,7 @@ class AuthState extends StoreModule {
 
       this.setState({
         ...this.getState(),
+        isLoggedIn: false,
         waiting: false
       });
 

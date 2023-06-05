@@ -19,7 +19,7 @@ function Article() {
   const params = useParams();
 
   useInit(() => {
-    store.actions.auth.authChecking()
+    store.actions.auth.setLoggedIn(store.actions.profile.tokenChecking());
     store.actions.article.load(params.id);
   }, [params.id]);
 

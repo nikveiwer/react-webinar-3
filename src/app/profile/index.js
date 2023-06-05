@@ -23,18 +23,24 @@ function Profile() {
 
     const navigate = useNavigate();
  
-    useInit(() => {
-      if (store.actions.auth.authChecking()) {
-        store.actions.auth.getProfileInfo()
+    useInit(async () => {
+      const isTokenExist = store.actions.profile.tokenChecking()
+      if (isTokenExist) {
+        const isTokenValid = await store.actions.profile.getProfileInfo()
+
+        store.actions.auth.setLoggedIn(isTokenValid)
+        if (!isTokenValid) navigate("/")
       } else {
+        store.actions.auth.setLoggedIn(isTokenExist)
         navigate("/")
       }
-      console.log(store.actions.auth.authChecking())
+
+      store.actions.auth.setLoggedIn
     }, []);
 
     const select = useSelector(state => ({
-        profileInfo: state.auth.profileInfo,
-        waiting: state.auth.waiting
+        profileInfo: state.profile.profileInfo,
+        waiting: state.profile.waiting
     }));
   
   

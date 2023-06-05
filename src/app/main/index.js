@@ -14,9 +14,10 @@ function Main() {
 
   const store = useStore();
 
-  useInit(() => {
-    store.actions.auth.authChecking()
+  useInit(async () => {
+    store.actions.auth.setLoggedIn(store.actions.profile.tokenChecking());
     store.actions.catalog.initParams();
+    store.actions.categories.setCategories();
   }, [], true);
 
   const {t} = useTranslate();
