@@ -20,5 +20,10 @@
   "auth.password": "Password",
   "auth.signIn": "Sign in",
   "session.signIn": "Sign In",
-  "session.signOut": "Sign Out"
+  "session.signOut": "Sign Out",
+  "comments.respond": "Respond",
+  "comments.newcomment": "New comment",
+  "comments.send": "Send",
+  "comments.enter": "Sign in",
+  "comments.logdescr": "to be able for leaving comments"
 }

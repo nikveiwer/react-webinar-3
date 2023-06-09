@@ -1,0 +1,32 @@
+.CommentForm {
+    margin-top: 30px;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.CommentForm-label {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.CommentForm-text {
+    height: 80px;
+    padding: 4px 5px;
+    border: 1px solid #666666;
+    resize: none;
+}
+
+.CommentForm-send {
+    width: 90px;
+}
+
+.CommentForm-log {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+}
