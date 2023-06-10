@@ -5,6 +5,7 @@ import useSelector from "../../hooks/use-selector";
 import useTranslate from "../../hooks/use-translate";
 import listToTree from "../../utils/list-to-tree";
 import treeToList from "../../utils/tree-to-list";
+import findLastChild from "../../utils/find-last-child";
 import getNormalComment from "../../utils/get-normal-comment";
 import Item from "../../components/item";
 import List from "../../components/list";
@@ -16,6 +17,7 @@ import CommentsCount from "../../components/comments-count";
 
 import {useDispatch, useSelector as useSelectorRedux} from 'react-redux';
 import commentsActions from '../../store-redux/comments/actions';
+import comment from "../../components/comment";
 
 
 
@@ -68,29 +70,48 @@ function Comments() {
     ), [selectRedux.comments]),
   };
 
-  const renders = {
-    item: useCallback(item => (
-        <div key={item._id}>
-          <Comment
-          {...item} 
-          t={t} 
-          userId={select.userId}
-          setAnswerId={callbacks.setAnswerId}  />
+  let answeredComment = useMemo(() => (
+    options.comments.find(item => item._id === selectRedux.answerId)
+  ), [selectRedux.comments, selectRedux.answerId])
+  
 
-          {
-            selectRedux.answerId === item._id && (
-              <CommentForm t={t}
-                           answerId={selectRedux.answerId}
-                           padding={item.padding}
-                           exists={select.exists} 
-                           paramsId={params.id}
-                           setAnswerId={callbacks.setAnswerId}
-                           onEnter={callbacks.onEnter}
-                           onSubmit={callbacks.onSubmit} />
-            )
-          }
+  let idOfLastChild = useMemo(() => (
+    findLastChild(answeredComment)
+  ), [answeredComment])
+
+  let formPadding = useMemo(() => (
+    40 + (answeredComment?.level < 9 ? 30 * (answeredComment.level + 1) : 30 * 9)
+  ), [answeredComment])
+  
+
+  const renders = {
+    item: useCallback((item, i, array) => {
+
+        return (
+          <div key={item._id}>       
+
+            <Comment
+            {...item} 
+            t={t} 
+            userId={select.userId}
+            setAnswerId={callbacks.setAnswerId}  />
+
+            {
+              (selectRedux.answerId !== params.id && idOfLastChild === item._id) && (
+                <CommentForm t={t}
+                            answerId={selectRedux.answerId}
+                            padding={formPadding}
+                            exists={select.exists} 
+                            paramsId={params.id}
+                            setAnswerId={callbacks.setAnswerId}
+                            onEnter={callbacks.onEnter}
+                            onSubmit={callbacks.onSubmit} />
+              )
+            } 
+
         </div>
-    ), [t, select.userId, selectRedux.answerId, select.exists, params.id, callbacks.setAnswerId]),
+        )
+      }, [t, select.userId, selectRedux.answerId, select.exists, params.id, callbacks.setAnswerId]),
   };
 
   return (

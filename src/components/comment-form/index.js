@@ -28,7 +28,7 @@ function CommentForm({t, exists, answerId, padding, paramsId, setAnswerId, onEnt
 
                         {
                             answerId !== paramsId && (
-                                <button onClick={() => setAnswerId(paramsId)} className={cn("send")}>
+                                <button onClick={() => setAnswerId(paramsId)} className={cn("btn-cancel")}>
                                     {t("comments.cancel")}
                                 </button>
                             )
@@ -40,7 +40,14 @@ function CommentForm({t, exists, answerId, padding, paramsId, setAnswerId, onEnt
                     <button className={cn("enter")} onClick={onEnter}>
                         {t("comments.enter")}
                     </button>
-                    {`, ${t("comments.logdescr")}`}
+                    {`, ${t("comments.logdescr")}.`}
+                    {
+                        answerId !== paramsId && (
+                            <button onClick={() => setAnswerId(paramsId)} className={cn("link-cancel")}>
+                                {t("comments.cancel")}
+                            </button>
+                        )
+                    }
                 </div>
             )
         }

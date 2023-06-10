@@ -6,13 +6,13 @@ import './style.css';
 function List({list, renderItem, needWrapping = true}){
   return (
     <div className='List'>{
-      list.map(item =>
+      list.map((item, i, array) =>
         needWrapping ? (
           <div key={item._id} className='List-item'>
-            {renderItem(item)}
+            {renderItem(item, i, array)}
           </div>
         ) : (
-          renderItem(item)
+          renderItem(item, i, array)
         )
       )}
     </div>

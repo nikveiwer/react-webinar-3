@@ -10,6 +10,8 @@ export default function getNormalComment(item, level) {
             hours: dateCreate.getHours() < 10 ? `0${dateCreate.getHours()}` : `${dateCreate.getHours()}`,
             minutes: dateCreate.getMinutes() < 10 ? `0${dateCreate.getMinutes()}` : `${dateCreate.getMinutes()}`,
             text: item.text,
-            padding: 40 + (level <= 9 ? 30*level : 30*9)
+            padding: 40 + (level <= 9 ? 30*level : 30*9),
+            children: item.children,
+            level: level
     }
 }
