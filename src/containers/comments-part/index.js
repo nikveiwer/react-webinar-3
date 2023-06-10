@@ -1,54 +1,113 @@
-import {memo, useCallback} from "react";
+import {memo, useCallback, useMemo} from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import useStore from "../../hooks/use-store";
 import useSelector from "../../hooks/use-selector";
 import useTranslate from "../../hooks/use-translate";
+import listToTree from "../../utils/list-to-tree";
+import treeToList from "../../utils/tree-to-list";
+import getNormalComment from "../../utils/get-normal-comment";
 import Item from "../../components/item";
 import List from "../../components/list";
 import Pagination from "../../components/pagination";
 import Spinner from "../../components/spinner";
+import Comment from '../../components/comment';
+import CommentForm from '../../components/comment-form';
+import CommentsCount from "../../components/comments-count";
 
 import {useDispatch, useSelector as useSelectorRedux} from 'react-redux';
 import commentsActions from '../../store-redux/comments/actions';
 
 
+
 function Comments() {
   const store = useStore();
 
-  const select = useSelectorRedux(state => ({
-    // list: state.catalog.list,
-    // page: state.catalog.params.page,
-    // limit: state.catalog.params.limit,
-    // count: state.catalog.count,
-    comments: state.comments.comments,
-    waiting: state.comments.waiting,
+  const params = useParams();
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const select = useSelector(state => ({
+    userId: state.session.user._id,
+    exists: state.session.exists
   }));
 
-  console.log(select.comments)
+  const selectRedux = useSelectorRedux(state => ({
+    comments: state.comments.comments,
+    waiting: state.comments.waiting,
+    answerId: state.comments.answerId,
+    count: state.comments.count,
+  }));
 
   const callbacks = {
-    // Добавление в корзину
-    addToBasket: useCallback(_id => store.actions.basket.addToBasket(_id), [store]),
-    // Пагинация
-    onPaginate: useCallback(page => store.actions.catalog.setParams({page}), [store]),
-    // генератор ссылки для пагинатора
-    makePaginatorLink: useCallback((page) => {
-      return `?${new URLSearchParams({page, limit: select.limit, sort: select.sort, query: select.query})}`;
-    }, [select.limit, select.sort, select.query])
+    setAnswerId: useCallback((id) => {
+      dispatch(commentsActions.setAnswerId(id));
+    }, [commentsActions]),
+
+    onEnter: useCallback(() => {
+      navigate('/login', {state: {back: location.pathname}});
+    }, [location.pathname]),
+
+    onSubmit: useCallback((event, answerId, paramId, text) => {
+      event.preventDefault()
+
+      if (text) {
+        dispatch(commentsActions.send(answerId, paramId, text))
+      }
+    }, []),
   }
 
   const {t} = useTranslate();
 
+  console.log(selectRedux.comments)
+
+  const options = {
+    comments: useMemo(() => (
+      treeToList(listToTree(selectRedux.comments, "_id", "_type"), getNormalComment)
+    ), [selectRedux.comments]),
+  };
+
   const renders = {
     item: useCallback(item => (
-      <Item item={item} onAdd={callbacks.addToBasket} link={`/articles/${item._id}`} labelAdd={t('article.add')}/>
-    ), [callbacks.addToBasket, t]),
+        <div key={item._id}>
+          <Comment
+          {...item} 
+          t={t} 
+          userId={select.userId}
+          setAnswerId={callbacks.setAnswerId}  />
+
+          {
+            selectRedux.answerId === item._id && (
+              <CommentForm t={t}
+                           answerId={selectRedux.answerId}
+                           padding={item.padding}
+                           exists={select.exists} 
+                           paramsId={params.id}
+                           setAnswerId={callbacks.setAnswerId}
+                           onEnter={callbacks.onEnter}
+                           onSubmit={callbacks.onSubmit} />
+            )
+          }
+        </div>
+    ), [t, select.userId, selectRedux.answerId, select.exists, params.id, callbacks.setAnswerId]),
   };
 
   return (
-    <Spinner active={select.waiting}>
-      {/* <List list={select.list} renderItem={renders.item}/>
-      <Pagination count={select.count} page={select.page} limit={select.limit}
-                  onChange={callbacks.onPaginate} makeLink={callbacks.makePaginatorLink}/> */}
+    <Spinner active={selectRedux.waiting}>
+      <CommentsCount count={selectRedux.count} t={t}/>
+
+      <List list={options.comments} renderItem={renders.item} needWrapping={false}/>
+
+      {selectRedux.answerId === params.id && (
+        <CommentForm t={t}
+                     answerId={selectRedux.answerId}
+                     padding={40}
+                     exists={select.exists} 
+                     paramsId={params.id}
+                     onEnter={callbacks.onEnter}
+                     onSubmit={callbacks.onSubmit} />
+      )}
     </Spinner>
   );
 }
