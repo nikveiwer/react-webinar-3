@@ -4,7 +4,7 @@ export default function getNormalComment(item, level) {
             _id: item._id,
             name: item.author.profile.name,
             authorId: item.author._id,
-            day: dateCreate.getDay(),
+            day: dateCreate.getDate(),
             month: `comments.${dateCreate.getMonth()}`,
             year: dateCreate.getFullYear(),
             hours: dateCreate.getHours() < 10 ? `0${dateCreate.getHours()}` : `${dateCreate.getHours()}`,
