@@ -54,7 +54,7 @@ function Comments() {
     onSubmit: useCallback((event, answerId, paramId, text) => {
       event.preventDefault()
 
-      if (text) {
+      if (text && text.trim().length) {
         dispatch(commentsActions.send(answerId, paramId, text))
       }
     }, []),

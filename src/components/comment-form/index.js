@@ -22,7 +22,7 @@ function CommentForm({t, exists, answerId, padding, paramsId, setAnswerId, onEnt
                     <textarea value={text} onChange={(e) => setText(e.target.value)} name="comment" id="comment" className={cn("text")}/>
         
                     <div className={cn("buttons")}>
-                        <button disabled={!text} type='submit' className={cn("send")}>
+                        <button disabled={!text || !text.trim().length} type='submit' className={cn("send")}>
                             {t("comments.send")}
                         </button>
 
