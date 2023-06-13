@@ -25,7 +25,7 @@ export function I18nProvider({children}) {
   }), [lang]);
 
   return (
-    <I18nContext.Provider value={i18n}>
+    <I18nContext.Provider value={i18n}> 
       {children}
     </I18nContext.Provider>
   );
