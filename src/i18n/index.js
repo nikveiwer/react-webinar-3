@@ -9,15 +9,11 @@ class I18nService {
     }
 
     t = (text, number) => { 
-        translate(this.lang, text, number)
+        return translate(this.lang, text, number)
     }
 
     setLang = (newLang) => {
       this.lang = newLang
-
-      this.t = (text, number) => { 
-        translate(newLang, text, number)
-      }
 
       console.log(this)
     }
