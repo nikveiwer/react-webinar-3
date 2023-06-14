@@ -1,4 +1,4 @@
-import {memo, useCallback, useMemo} from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useStore from "../../hooks/use-store";
 import useSelector from "../../hooks/use-selector";
@@ -15,7 +15,7 @@ import Comment from '../../components/comment';
 import CommentForm from '../../components/comment-form';
 import CommentsCount from "../../components/comments-count";
 
-import {useDispatch, useSelector as useSelectorRedux} from 'react-redux';
+import { useDispatch, useSelector as useSelectorRedux } from 'react-redux';
 import commentsActions from '../../store-redux/comments/actions';
 import comment from "../../components/comment";
 
@@ -48,7 +48,7 @@ function Comments() {
     }, [commentsActions]),
 
     onEnter: useCallback(() => {
-      navigate('/login', {state: {back: location.pathname}});
+      navigate('/login', { state: { back: location.pathname } });
     }, [location.pathname]),
 
     onSubmit: useCallback((event, answerId, paramId, text) => {
@@ -60,7 +60,9 @@ function Comments() {
     }, []),
   }
 
-  const {t} = useTranslate();
+  const multilang = useTranslate();
+
+  const { t } = multilang;
 
   console.log(selectRedux.comments)
 
@@ -73,7 +75,7 @@ function Comments() {
   let answeredComment = useMemo(() => (
     options.comments.find(item => item._id === selectRedux.answerId)
   ), [selectRedux.comments, selectRedux.answerId])
-  
+
 
   let idOfLastChild = useMemo(() => (
     findLastChild(answeredComment)
@@ -82,52 +84,52 @@ function Comments() {
   let formPadding = useMemo(() => (
     40 + (answeredComment?.level < 9 ? 30 * (answeredComment.level + 1) : 30 * 9)
   ), [answeredComment])
-  
+
 
   const renders = {
     item: useCallback((item, i, array) => {
 
-        return (
-          <div key={item._id}>       
+      return (
+        <div key={item._id}>
 
-            <Comment
-            {...item} 
-            t={t} 
+          <Comment
+            {...item}
+            t={t}
             userId={select.userId}
-            setAnswerId={callbacks.setAnswerId}  />
+            setAnswerId={callbacks.setAnswerId} />
 
-            {
-              (selectRedux.answerId !== params.id && idOfLastChild === item._id) && (
-                <CommentForm t={t}
-                            answerId={selectRedux.answerId}
-                            padding={formPadding}
-                            exists={select.exists} 
-                            paramsId={params.id}
-                            setAnswerId={callbacks.setAnswerId}
-                            onEnter={callbacks.onEnter}
-                            onSubmit={callbacks.onSubmit} />
-              )
-            } 
+          {
+            (selectRedux.answerId !== params.id && idOfLastChild === item._id) && (
+              <CommentForm t={t}
+                answerId={selectRedux.answerId}
+                padding={formPadding}
+                exists={select.exists}
+                paramsId={params.id}
+                setAnswerId={callbacks.setAnswerId}
+                onEnter={callbacks.onEnter}
+                onSubmit={callbacks.onSubmit} />
+            )
+          }
 
         </div>
-        )
-      }, [t, select.userId, selectRedux.answerId, select.exists, params.id, callbacks.setAnswerId]),
+      )
+    }, [multilang, select.userId, selectRedux.answerId, select.exists, params.id, callbacks.setAnswerId]),
   };
 
   return (
     <Spinner active={selectRedux.waiting}>
-      <CommentsCount count={selectRedux.count} t={t}/>
+      <CommentsCount count={selectRedux.count} t={t} />
 
-      <List list={options.comments} renderItem={renders.item} needWrapping={false}/>
+      <List list={options.comments} renderItem={renders.item} needWrapping={false} />
 
       {selectRedux.answerId === params.id && (
         <CommentForm t={t}
-                     answerId={selectRedux.answerId}
-                     padding={40}
-                     exists={select.exists} 
-                     paramsId={params.id}
-                     onEnter={callbacks.onEnter}
-                     onSubmit={callbacks.onSubmit} />
+          answerId={selectRedux.answerId}
+          padding={40}
+          exists={select.exists}
+          paramsId={params.id}
+          onEnter={callbacks.onEnter}
+          onSubmit={callbacks.onSubmit} />
       )}
     </Spinner>
   );
